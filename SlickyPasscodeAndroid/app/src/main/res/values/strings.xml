@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Slicky Passcode</string>
+    <string name="title">Please enter your 4 digit pin code</string>
+</resources>
