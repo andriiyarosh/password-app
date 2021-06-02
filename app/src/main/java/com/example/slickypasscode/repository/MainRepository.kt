@@ -1,15 +1,13 @@
 package com.example.slickypasscode.repository
 
-import android.text.style.TtsSpan
 import com.example.slickypasscode.network.ServerInterface
-import java.util.*
 
 interface MainRepository {
 
     suspend fun getPasscodeData(): PasscodeRequestResult
 
     sealed class PasscodeRequestResult {
-        data class SuccessRequest(val password: String, val digits: LinkedList<Int>): PasscodeRequestResult()
+        data class SuccessRequest(val password: String, val digits: ArrayList<Int>): PasscodeRequestResult()
         object FailureRequest: PasscodeRequestResult()
     }
 
@@ -32,7 +30,7 @@ interface MainRepository {
                     val data = result.value ?: throw IllegalArgumentException("Cannot receive password data")
                     PasscodeRequestResult.SuccessRequest(
                         data[ServerInterface.ResultKeys.CODE] as String,
-                        data[ServerInterface.ResultKeys.SETUP] as LinkedList<Int>
+                        (data[ServerInterface.ResultKeys.SETUP] as ArrayList<*>).map { it as Int } as ArrayList<Int>
                     )
                 }
                 ServerInterface.NetworkResult.FAILURE -> PasscodeRequestResult.FailureRequest
